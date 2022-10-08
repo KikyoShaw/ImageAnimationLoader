@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resource\test.webp" />
+    <None Remove="Resource\test_animation.gif" />
+    <None Remove="Resource\test_animation.webp" />
+    <None Remove="Resource\test_no_alpha.gif" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ImageLoader\ImageLoader.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resource\test.webp" />
+    <Resource Include="Resource\test_animation.gif" />
+    <Resource Include="Resource\test_animation.webp" />
+    <Resource Include="Resource\test_no_alpha.gif" />
+  </ItemGroup>
+
+</Project>

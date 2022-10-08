@@ -1,0 +1,80 @@
+﻿
+<!--说明：此脚本主要是将需要的文件拷贝到输出目录，方便开发的时候编译调试，因为一些native文件只有调用 发布.net core 程序的时候才会拷贝到对应的目录，平时编译的时候不会拷贝-->
+<Project>
+    <PropertyGroup>
+        <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <BuildPlatform>x86</BuildPlatform>
+        <BuildPlatform Condition="'$(PlatformTarget)' == 'Win32'">x86</BuildPlatform>
+        <BuildPlatform Condition="'$(PlatformTarget)' == 'AnyCPU'">x86</BuildPlatform>
+        <BuildPlatform Condition="'$(PlatformTarget)' != 'Win32' and '$(PlatformTarget)' != 'AnyCPU' and '$(PlatformTarget)' !='' ">$(PlatformTarget)</BuildPlatform>
+    </PropertyGroup>
+
+    <!--二进制文件-->
+    <ItemGroup>
+        <_NativeFiles Include="$(MSBuildThisFileDirectory)..\natives\win-$(BuildPlatform)\lib\$(TargetFramework)\*.*" />
+        <_CSharpFiles Include="$(MSBuildThisFileDirectory)..\lib\$(TargetFrameWork)\*.dll" />
+    </ItemGroup>
+
+    <!--pdb文件-->
+    <ItemGroup>
+        <_NativePDBFiles Include="$(MSBuildThisFileDirectory)..\pdbs\win-$(BuildPlatform)\lib\$(TargetFramework)\*.pdb"/>
+        <_CSharpPDBFiles Include="$(MSBuildThisFileDirectory)..\lib\$(TargetFrameWork)\*.pdb"/>
+    </ItemGroup>
+
+    <Target Name="MyAfterBuild" AfterTargets="Build">
+        <Message Importance="high" Text="$(MSBuildProjectName) 项目已经加入$(MSBuildThisFileName)模块，BuildPlatform = $(BuildPlatform)" />
+
+        <CallTarget Targets="CopyCSharpFilesToBuild"></CallTarget>
+        <CallTarget Targets="CopyNativeFilesToBuild"></CallTarget>
+
+        <CallTarget Targets="CopyCSharpPDBFilesToOutPut"></CallTarget>
+        <CallTarget Targets="CopyNativePDBFilesToOutPut"></CallTarget>
+    </Target>
+
+    <Target Name="MyAfterPublish" AfterTargets="Publish">
+        <CallTarget Targets="CopyCSharpFilesToPublish"></CallTarget>
+        <CallTarget Targets="CopyNativeFilesToPublish"></CallTarget>
+
+        <CallTarget Targets="CopyCSharpPDBFilesToPublish"></CallTarget>
+        <CallTarget Targets="CopyNativePDBFilesToOutPut"></CallTarget>
+    </Target>
+
+    <Target Name="CopyCSharpFilesToBuild">
+        <Message Condition="'$(OutputPath)' != '' and '$(OutputType)' != 'WinExe'" Importance="high" Text="$(MSBuildProjectName) 项目不是exe项目，自动拷贝.dll到编译输出目录: $(OutputPath)"></Message>
+        <Copy Condition="'$(OutputPath)' != '' and '$(OutputType)' != 'WinExe'" SourceFiles="@(_CSharpFiles)" DestinationFolder="$(OutputPath)"></Copy>
+    </Target>
+    <Target Name="CopyNativeFilesToBuild">
+        <Message Condition="'$(OutputPath)' != ''" Importance="high" Text="拷贝native文件到编译输出目录: $(OutputPath)"></Message>
+        <Copy Condition="'$(OutputPath)' != ''" SourceFiles="@(_NativeFiles)" DestinationFolder="$(OutputPath)"></Copy>
+    </Target>
+
+    <Target Name="CopyCSharpFilesToPublish">
+        <Message Condition="'$(PublishDir)' != '' and '$(OutputType)' != 'WinExe'" Importance="high" Text="$(MSBuildProjectName) 项目不是exe项目，自动拷贝.dll到发布目录: $(PublishDir)"></Message>
+        <Copy Condition="'$(PublishDir)' != '' and '$(OutputType)' != 'WinExe'" SourceFiles="@(_CSharpFiles)" DestinationFolder="$(PublishDir)"></Copy>
+    </Target>
+    <Target Name="CopyNativeFilesToPublish">
+        <Message Condition="'$(PublishDir)' != ''" Importance="high" Text="拷贝native文件到发布目录: $(PublishDir)"></Message>
+        <Copy Condition="'$(PublishDir)' != ''" SourceFiles="@(_NativeFiles)" DestinationFolder="$(PublishDir)"></Copy>
+    </Target>
+
+    <Target Name="CopyCSharpPDBFilesToOutPut">
+        <Message Condition="'$(OutputPath)' != ''" Importance="high" Text="拷贝 CSharp PDB文件到输出目录: $(OutputPath)"></Message>
+        <Copy Condition="'$(OutputPath)' != ''" SourceFiles="@(_CSharpPDBFiles)" DestinationFolder="$(OutputPath)"></Copy>
+    </Target>
+    <Target Name="CopyNativePDBFilesToOutPut">
+        <Message Condition="'$(OutputPath)' != ''" Importance="high" Text="拷贝 Native PDB文件到输出目录: $(OutputPath)"></Message>
+        <Copy Condition="'$(OutputPath)' != ''" SourceFiles="@(_NativePDBFiles)" DestinationFolder="$(OutputPath)"></Copy>
+    </Target>
+
+    <Target Name="CopyCSharpPDBFilesToPublish">
+        <Message Condition="'$(PublishDir)' != ''" Importance="high" Text="拷贝 CSharp PDB文件到发布目录: $(PublishDir)"></Message>
+        <Copy Condition="'$(PublishDir)' != ''" SourceFiles="@(_CSharpPDBFiles)" DestinationFolder="$(PublishDir)"></Copy>
+    </Target>
+    <Target Name="CopyNativePDBFilesToPublish">
+        <Message Condition="'$(PublishDir)' != ''" Importance="high" Text="拷贝 Native PDB文件到发布目录: $(PublishDir)"></Message>
+        <Copy Condition="'$(PublishDir)' != ''" SourceFiles="@(_NativePDBFiles)" DestinationFolder="$(PublishDir)"></Copy>
+    </Target>
+</Project>

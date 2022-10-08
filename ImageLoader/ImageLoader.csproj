@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+    <PropertyGroup>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IncludeBuildOutput>true</IncludeBuildOutput>
+        <PackageId>ImageLoader</PackageId>
+        <Version>1.0.0</Version>
+		<Authors>shaw-xw@outlook.com</Authors>
+	    <Company>Github</Company>
+        <Description>加载webp和gif文件</Description>
+	    <RepositoryUrl>https://github.com/KikyoShaw/ImageAnimationLoader</RepositoryUrl>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <PlatformTarget>x86</PlatformTarget>
+        <NoWarn>NU5100</NoWarn>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\ImageLoader.runtime\ImageLoader.runtime.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="ImageParser.dll" HintPath="..\ImageLoader.runtime\Assets\runtimes\win-$(PlatformTarget)\lib\$(TargetFramework)\ImageParser.dll" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="..\ImageLoader.runtime\Assets\runtimes\**\*.pdb" Pack="True" PackagePath="pdbs" />
+        <None Include="..\ImageLoader.runtime\Assets\runtimes\**\*.dll" Pack="True" PackagePath="natives" />
+        <None Update="Assets\CopyNative.targets" Pack="True" PackagePath="build\$(PackageId).targets" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Assets\" />
+    </ItemGroup>
+</Project>

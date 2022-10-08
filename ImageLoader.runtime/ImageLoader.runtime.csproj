@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+    <PropertyGroup>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <!--<IncludeBuildOutput>true</IncludeBuildOutput>-->
+        <PackageId>ImageLoader.runtime</PackageId>
+        <Version>1.0.0</Version>
+        <Authors>shaw-xw@outlook.com</Authors>
+        <Company>Github</Company>
+        <Description>runtime</Description>
+        <RepositoryUrl>https://github.com/KikyoShaw/ImageAnimationLoader</RepositoryUrl>
+        <IsTool>true</IsTool>
+        <!--<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>-->
+        <NoWarn>NU5131</NoWarn>
+    </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\runtimes\win-x64\lib\netcoreapp3.1\" />
+    <Folder Include="Assets\runtimes\win-x86\lib\netcoreapp3.1\" />
+  </ItemGroup>
+    <ItemGroup>
+        <None Include="Assets\runtimes\**\*.dll" Pack="True" PackagePath="runtimes" />
+
+        <None Include="Assets\runtimes\win-x86\lib\netcoreapp3.1\ImageParser.dll" Pack="True" PackagePath="ref\netcoreapp3.1" />
+    </ItemGroup>
+
+</Project>

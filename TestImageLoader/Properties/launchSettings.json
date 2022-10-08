@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TesTImageLoader": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
